@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/setting_group_basic">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enable_floating_ball"
+            android:title="@string/setting_enable_floating_ball_title"
+            android:summary="@string/setting_enable_floating_ball_summary" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

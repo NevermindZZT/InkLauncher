@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">InkLauncher</string>
 
+    <string name="activity_setting_title">Settings</string>
+
+    <string name="setting_group_basic">Basic Settings</string>
+    <string name="setting_enable_floating_ball_title">Floating Ball</string>
+    <string name="setting_enable_floating_ball_summary">Enable or disable floating ball</string>
+
 </resources>

@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.startActivity
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.blankj.utilcode.util.AppUtils
 import com.letter.inklauncher.R
 import com.letter.inklauncher.adapter.BindingViewAdapter
 import com.letter.inklauncher.databinding.FragmentLauncherBinding
+import com.letter.inklauncher.ui.activity.SettingActivity
 import com.letter.inklauncher.viewmodel.LauncherViewModel
 import com.letter.presenter.ItemClickPresenter
 import com.letter.presenter.ItemLongClickPresenter
@@ -23,7 +25,7 @@ import com.letter.presenter.ItemLongClickPresenter
  * @author Letter(nevermindzzt@gmail.com)
  * @since 1.0.0
  */
-class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter {
+class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter, View.OnClickListener {
 
     private lateinit var binding: FragmentLauncherBinding
     private val model by lazy {
@@ -69,5 +71,11 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter 
 
     override fun onItemLongClick(adapter: Any, position: Int): Boolean {
         return true
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.setting_button -> startActivity(SettingActivity::class.java)
+        }
     }
 }
