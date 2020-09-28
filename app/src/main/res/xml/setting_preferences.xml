@@ -5,6 +5,12 @@
     <PreferenceCategory android:title="@string/setting_group_basic">
 
         <SwitchPreference
+            android:defaultValue="true"
+            android:key="enable_back_to_home_notification"
+            android:title="@string/setting_enable_back_to_home_notification_title"
+            android:summary="@string/setting_enable_back_to_home_notification_summary" />
+
+        <SwitchPreference
             android:defaultValue="false"
             android:key="enable_floating_ball"
             android:title="@string/setting_enable_floating_ball_title"

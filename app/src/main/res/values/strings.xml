@@ -4,7 +4,15 @@
     <string name="activity_setting_title">Settings</string>
 
     <string name="setting_group_basic">Basic Settings</string>
+    <string name="setting_enable_back_to_home_notification_title">Enable Back to Home Notification</string>
+    <string name="setting_enable_back_to_home_notification_summary">Enable Back to Home Notification</string>
     <string name="setting_enable_floating_ball_title">Floating Ball</string>
     <string name="setting_enable_floating_ball_summary">Enable or disable floating ball</string>
+
+    <string name="notification_channel_intent_id">intent</string>
+    <string name="notification_channel_intent_name">Intent Notification</string>
+
+    <string name="notification_back_to_home_title">Back to home</string>
+    <string name="notification_back_to_home_content">Click Notification to back to home</string>
 
 </resources>

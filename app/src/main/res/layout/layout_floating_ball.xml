@@ -12,19 +12,20 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageButton
-            android:id="@+id/setting_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/floating_button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:background="@null"
-            android:padding="8dp"
             android:onClick="@{view -> onClickListener.onClick(view)}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher_settings"
+            app:srcCompat="@drawable/ic_floating_ball"
             tools:ignore="contentDescription"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

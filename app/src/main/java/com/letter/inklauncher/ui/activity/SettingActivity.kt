@@ -2,8 +2,11 @@ package com.letter.inklauncher.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import com.letter.inklauncher.databinding.ActivitySettingBinding
+
+private const val TAG = "SettingActivity"
 
 /**
  * 设置活动

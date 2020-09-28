@@ -30,7 +30,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment"
-            android:name="com.letter.inklauncher.fragment.ui.SettingFragment"
+            android:name="com.letter.inklauncher.ui.fragment.SettingFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />

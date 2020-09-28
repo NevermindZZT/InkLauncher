@@ -37,6 +37,7 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLauncherBinding.inflate(inflater)
+        initBinding()
         initModel()
         return binding.root
     }
@@ -44,6 +45,13 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
     override fun onResume() {
         super.onResume()
         model.loadAppList(requireContext())
+    }
+
+    private fun initBinding() {
+        binding.let {
+            it.lifecycleOwner = this@LauncherFragment.viewLifecycleOwner
+            it.bottomToolbar.onClickListener = this@LauncherFragment
+        }
     }
 
     private fun initModel() {

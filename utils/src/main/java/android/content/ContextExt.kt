@@ -102,6 +102,18 @@ fun <T: Service> Context.startService(clazz: Class<T>, act: (Intent.()->Unit)? =
 }
 
 /**
+ * stop 服务
+ * @receiver Context context
+ * @param clazz Class<T> 服务
+ * @param act [@kotlin.ExtensionFunctionType] Function1<Intent, Unit>? Intent执行动作
+ */
+fun <T: Service> Context.stopService(clazz: Class<T>, act: (Intent.()->Unit)? = null) {
+    val intent = Intent(this, clazz)
+    act?.invoke(intent)
+    stopService(intent)
+}
+
+/**
  * 发送广播
  * @receiver Context context
  * @param action String 广播动作
