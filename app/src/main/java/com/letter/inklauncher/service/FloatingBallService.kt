@@ -1,5 +1,6 @@
 package com.letter.inklauncher.service
 
+import android.accessibilityservice.AccessibilityService
 import android.app.Service
 import android.content.*
 import android.graphics.PixelFormat
@@ -12,8 +13,14 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityManager
+import com.blankj.utilcode.util.ShellUtils
 import com.letter.inklauncher.R
 import com.letter.inklauncher.databinding.LayoutFloatingBallBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.lang.Math.abs
 
 private const val TAG = "FloatingBallService"
 
@@ -23,16 +30,21 @@ private const val TAG = "FloatingBallService"
  * @author Letter(nevermindzzt@gmail.com)
  * @since 1.0.0
  */
-class FloatingBallService : Service(), View.OnClickListener {
+class FloatingBallService : AccessibilityService(), View.OnClickListener {
 
     private lateinit var binding: LayoutFloatingBallBinding
-
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
-    }
+    private lateinit var layoutParams: WindowManager.LayoutParams
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+
+    }
+
+    override fun onInterrupt() {
+
     }
 
     override fun onCreate() {
@@ -47,7 +59,7 @@ class FloatingBallService : Service(), View.OnClickListener {
     }
 
     private fun createFloatingBall() {
-        val  layoutParams = WindowManager.LayoutParams()
+        layoutParams = WindowManager.LayoutParams()
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         layoutParams.apply {
             type =
@@ -61,7 +73,7 @@ class FloatingBallService : Service(), View.OnClickListener {
                     WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
             gravity = Gravity.START or Gravity.TOP
             x = 0
-            y = 0
+            y = 500
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT
         }
@@ -75,29 +87,70 @@ class FloatingBallService : Service(), View.OnClickListener {
     private fun initBinding() {
         binding.let {
             it.onClickListener = this@FloatingBallService
+            it.floatingButton.setOnTouchListener { _, event ->
+                val x = (event.getRawX() - it.root.width / 2).toInt()
+                val y = (event.getRawY() - it.root.height / 2).toInt()
+                if (abs(layoutParams.x - x) > 48 || abs(layoutParams.y - y) > 48) {
+                    layoutParams.x = x
+                    layoutParams.y = y
+                    (getSystemService(Context.WINDOW_SERVICE) as WindowManager).updateViewLayout(it.root, layoutParams)
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.floating_button -> {
-
+                performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
             }
         }
     }
 
     companion object {
-        fun startService(context: Context) {
+
+        private fun checkAccessibility(context: Context, func: (() -> Unit)?) {
+            try {
+                context.startActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            } catch (e: Exception) {
+                ShellUtils.execCmd(
+                    "pm grant com.letter.inklauncher android.permission.BIND_ACCESSIBILITY_SERVICE",
+                    false
+                )
+            }
+            func?.invoke()
+        }
+
+        private fun checkOverlaysPermission(context: Context, func: (() -> Unit)?) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (Settings.canDrawOverlays(context)) {
-                    context.startService(FloatingBallService::class.java)
+                    func?.invoke()
                 } else {
-                    context.startActivity(Settings.ACTION_MANAGE_OVERLAY_PERMISSION) {
-                        data = Uri.parse("package:" + context.packageName)
+                    try {
+                        context.startActivity(Settings.ACTION_MANAGE_OVERLAY_PERMISSION) {
+                            data = Uri.parse("package:" + context.packageName)
+                        }
+                    } catch (e: Exception) {
+                        ShellUtils.execCmd(
+                            "pm grant com.letter.inklauncher android.permission.SYSTEM_ALERT_WINDOW",
+                            false
+                        )
+                        func?.invoke()
                     }
                 }
             } else {
-                context.startService(FloatingBallService::class.java)
+                func?.invoke()
+            }
+        }
+
+        fun startService(context: Context) {
+            checkOverlaysPermission(context) {
+                checkAccessibility(context) {
+                    context.startService(FloatingBallService::class.java)
+                }
             }
         }
 

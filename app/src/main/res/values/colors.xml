@@ -15,6 +15,6 @@
     <color name="colorAnniBackgroundTint">#80FFFFFF</color>
 
     <color name="colorSplitLine">#000000</color>
-    <color name="colorFloatingBorder">#000000</color>
+    <color name="colorFloatingBorder">#80000000</color>
     <color name="colorFloatingInner">#10000000</color>
 </resources>

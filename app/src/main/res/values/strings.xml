@@ -15,4 +15,5 @@
     <string name="notification_back_to_home_title">Back to home</string>
     <string name="notification_back_to_home_content">Click Notification to back to home</string>
 
+    <string name="service_start_floating_ball_description">Start Floating Ball</string>
 </resources>
