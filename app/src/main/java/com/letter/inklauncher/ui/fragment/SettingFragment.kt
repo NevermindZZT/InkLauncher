@@ -1,7 +1,10 @@
 package com.letter.inklauncher.ui.fragment
 
+import android.content.ComponentName
+import android.content.startActivity
 import android.content.startService
 import android.os.Bundle
+import android.provider.Settings
 import androidx.preference.*
 
 import com.letter.inklauncher.R
@@ -32,6 +35,16 @@ class SettingFragment : PreferenceFragmentCompat() {
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         when (preference?.key) {
             "enable_back_to_home_notification" -> context?.startService(NotificationService::class.java)
+            "accessibility_setting" -> context?.startActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            "input_method_setting" -> context?.startActivity(Settings.ACTION_INPUT_METHOD_SETTINGS)
+            "device_manager_setting" -> context?.startActivity {
+                component = ComponentName(
+                    "com.android.settings",
+                    "com.android.settings.DeviceAdminSettings"
+                )
+                action = "android.intent.action.VIEW"
+            }
+            "app_manager_setting" -> context?.startActivity(Settings.ACTION_APPLICATION_SETTINGS)
         }
         return super.onPreferenceTreeClick(preference)
     }

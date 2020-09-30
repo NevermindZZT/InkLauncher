@@ -57,9 +57,10 @@ class NotificationService : Service() {
  * @return Notification 前台通知
  */
 private fun getIntentNotification(context: Context): Notification {
-    val intent = Intent(context.applicationContext, LauncherActivity::class.java)
+    val intent = Intent(Intent.ACTION_MAIN)
     intent.apply {
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        addCategory(Intent.CATEGORY_HOME)
     }
     val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

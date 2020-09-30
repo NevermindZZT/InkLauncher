@@ -18,5 +18,24 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/setting_group_system">
+
+        <Preference
+            android:key="accessibility_setting"
+            android:title="@string/setting_accessibility_title" />
+
+        <Preference
+            android:key="input_method_setting"
+            android:title="@string/setting_input_method_title" />
+
+        <Preference
+            android:key="device_manager_setting"
+            android:title="@string/setting_device_manager_title" />
+
+        <Preference
+            android:key="app_manager_setting"
+            android:title="@string/setting_app_manager_title" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

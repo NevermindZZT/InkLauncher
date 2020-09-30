@@ -39,12 +39,14 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
         binding = FragmentLauncherBinding.inflate(inflater)
         initBinding()
         initModel()
+        model.loadAppList(requireContext())
+        model.registerBroadcast(requireContext())
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        model.loadAppList(requireContext())
+    override fun onDestroyView() {
+        super.onDestroyView()
+        model.unregisterBroadcast(requireContext())
     }
 
     private fun initBinding() {

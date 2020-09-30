@@ -105,7 +105,9 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.floating_button -> {
-                performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+                if (!performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)) {
+                    sendBroadcast("com.mogu.back_key")
+                }
             }
         }
     }

@@ -1,6 +1,9 @@
 package com.letter.inklauncher.viewmodel
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
@@ -22,6 +25,23 @@ class LauncherViewModel : ViewModel() {
         ObservableArrayList()
     )
 
+    private val filter by lazy {
+        IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addAction(Intent.ACTION_PACKAGE_REPLACED)
+            addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED)
+
+            addDataScheme("package")
+        }
+    }
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+
+        }
+    }
+
     private val hidedPackages = listOf(
         "com.letter.inklauncher"
     )
@@ -36,8 +56,18 @@ class LauncherViewModel : ViewModel() {
         appList.value?.addAll(
             AppUtils.getAppInfoList(context, PackageManager.GET_ACTIVITIES).filter {
                 it.hasMainActivity && !hidedPackages.contains(it.packageName)
+            }.sortedBy {
+                it.name
             }
         )
+    }
+
+    fun registerBroadcast(context: Context) {
+        context.registerReceiver(receiver, filter)
+    }
+
+    fun unregisterBroadcast(context: Context) {
+        context.unregisterReceiver(receiver)
     }
 
 }
