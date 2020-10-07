@@ -37,12 +37,5 @@ class LetterApplication : Application() {
             PreferenceManager.getDefaultSharedPreferences(this)
                 .getString("theme_mode", "-1")?.toInt() ?: -1
         )
-
-        startService(NotificationService::class.java)
-        if (PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean("enable_floating_ball", false)) {
-            FloatingBallService.startService(this)
-        }
-
     }
 }

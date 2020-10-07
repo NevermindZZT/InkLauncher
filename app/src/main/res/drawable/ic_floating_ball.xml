@@ -4,8 +4,10 @@
         <shape
             android:shape="oval">
             <stroke android:color="@color/colorFloatingBorder"
-                android:width="4dp" />
-            <solid android:color="@color/colorFloatingInner" />
+                android:width="2dp"
+                android:dashGap="16dp"
+                android:dashWidth="2dp"/>
+<!--            <solid android:color="@color/colorFloatingInner" />-->
         </shape>
     </item>
 </selector>

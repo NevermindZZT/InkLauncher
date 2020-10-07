@@ -18,6 +18,7 @@ import android.view.accessibility.AccessibilityManager
 import com.blankj.utilcode.util.ShellUtils
 import com.letter.inklauncher.R
 import com.letter.inklauncher.databinding.LayoutFloatingBallBinding
+import com.letter.inklauncher.widget.FloatingBallView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Math.abs
@@ -32,7 +33,7 @@ private const val TAG = "FloatingBallService"
  */
 class FloatingBallService : AccessibilityService(), View.OnClickListener {
 
-    private lateinit var binding: LayoutFloatingBallBinding
+    private lateinit var floatingBallView : FloatingBallView
     private lateinit var layoutParams: WindowManager.LayoutParams
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -53,8 +54,7 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
     }
 
     override fun onDestroy() {
-        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        windowManager.removeView(binding.root)
+        (getSystemService(Context.WINDOW_SERVICE) as WindowManager?)?.removeView(floatingBallView)
         super.onDestroy()
     }
 
@@ -78,28 +78,9 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
             height = WindowManager.LayoutParams.WRAP_CONTENT
         }
 
-        binding = LayoutFloatingBallBinding.inflate(LayoutInflater.from(this.application))
-        initBinding()
-        windowManager.addView(binding.root, layoutParams)
-        binding.root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-    }
-
-    private fun initBinding() {
-        binding.let {
-            it.onClickListener = this@FloatingBallService
-            it.floatingButton.setOnTouchListener { _, event ->
-                val x = (event.getRawX() - it.root.width / 2).toInt()
-                val y = (event.getRawY() - it.root.height / 2).toInt()
-                if (abs(layoutParams.x - x) > 48 || abs(layoutParams.y - y) > 48) {
-                    layoutParams.x = x
-                    layoutParams.y = y
-                    (getSystemService(Context.WINDOW_SERVICE) as WindowManager).updateViewLayout(it.root, layoutParams)
-                    true
-                } else {
-                    false
-                }
-            }
-        }
+        floatingBallView = FloatingBallView(this)
+        windowManager.addView(floatingBallView, layoutParams)
+        floatingBallView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     }
 
     override fun onClick(v: View?) {
@@ -114,7 +95,7 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
 
     companion object {
 
-        private fun checkAccessibility(context: Context, func: (() -> Unit)?) {
+        private fun checkAccessibility(context: Context, func: (() -> Unit)? = null) {
             try {
                 context.startActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             } catch (e: Exception) {
@@ -126,7 +107,7 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
             func?.invoke()
         }
 
-        private fun checkOverlaysPermission(context: Context, func: (() -> Unit)?) {
+        private fun checkOverlaysPermission(context: Context, func: (() -> Unit)? = null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (Settings.canDrawOverlays(context)) {
                     func?.invoke()
@@ -150,9 +131,8 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
 
         fun startService(context: Context) {
             checkOverlaysPermission(context) {
-                checkAccessibility(context) {
-                    context.startService(FloatingBallService::class.java)
-                }
+                context.startService(FloatingBallService::class.java)
+//                checkAccessibility(context)
             }
         }
 

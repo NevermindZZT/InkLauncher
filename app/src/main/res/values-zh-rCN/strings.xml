@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">InkLauncher</string>
+    <string name="activity_setting_title">设置</string>
+    <string name="setting_group_basic">基础设置</string>
+    <string name="setting_enable_back_to_home_notification_title">开启返回桌面通知</string>
+    <string name="setting_enable_back_to_home_notification_summary">开启返回桌面通知，打开后会有一条常驻通知，点击可返回桌面</string>
+    <string name="setting_enable_floating_ball_title">悬浮球</string>
+    <string name="setting_enable_floating_ball_summary">开启悬浮球，需要获取悬浮权限</string>
+    <string name="setting_group_system">系统设置</string>
+    <string name="setting_accessibility_title">无障碍服务</string>
+    <string name="setting_input_method_title">输入法设置</string>
+    <string name="setting_device_manager_title">设备管理器</string>
+    <string name="setting_app_manager_title">应用管理</string>
+    <string name="notification_back_to_home_title">返回桌面</string>
+    <string name="notification_back_to_home_content">点击通知返回桌面</string>
+    <string name="service_start_floating_ball_description">开启悬浮球</string>
+</resources>

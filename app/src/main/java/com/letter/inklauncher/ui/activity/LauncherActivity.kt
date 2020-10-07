@@ -25,6 +25,8 @@ class LauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        model.startService(this)
     }
 
 }

@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.IBinder
 import androidx.preference.PreferenceManager
 import com.letter.inklauncher.R
-import com.letter.inklauncher.ui.activity.LauncherActivity
 
 /**
  * notification service
@@ -32,7 +31,7 @@ class NotificationService : Service() {
             createNotificationChannel(
                 getString(R.string.notification_channel_intent_id),
                 getString(R.string.notification_channel_intent_name),
-                NotificationManager.IMPORTANCE_MIN)
+                NotificationManager.IMPORTANCE_MAX)
         }
     }
 
@@ -47,7 +46,7 @@ class NotificationService : Service() {
                 stopForeground(true)
             }
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 }
 

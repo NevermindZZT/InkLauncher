@@ -1,20 +1,23 @@
 package com.letter.inklauncher.viewmodel
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.preference.PreferenceManager
+import com.letter.inklauncher.service.FloatingBallService
+import com.letter.inklauncher.service.NotificationService
 import com.letter.utils.AppInfo
 import com.letter.utils.AppUtils
 
 /**
  * launcher view model
  * @property appList MutableLiveData<ObservableList<AppInfo>> 显示的应用信息列表
+ * @property filter IntentFilter intent filter
+ * @property receiver <no name provided> 广播接收器
+ * @property hidedPackages List<String>需要隐藏的包名列表
  *
  * @author Letter(nevermindzzt@gmail.com)
  * @since 1.0.0
@@ -38,12 +41,15 @@ class LauncherViewModel : ViewModel() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-
+            loadAppList(context!!)
         }
     }
 
     private val hidedPackages = listOf(
-        "com.letter.inklauncher"
+        "com.moan.moanwm",
+        "com.letter.inklauncher",
+        "com.android.settings",
+        "com.mgs.factorytest"
     )
 
     /**
@@ -62,12 +68,31 @@ class LauncherViewModel : ViewModel() {
         )
     }
 
+    /**
+     * 注册广播接收器
+     * @param context Context context
+     */
     fun registerBroadcast(context: Context) {
         context.registerReceiver(receiver, filter)
     }
 
+    /**
+     * 注销广播接收器
+     * @param context Context context
+     */
     fun unregisterBroadcast(context: Context) {
         context.unregisterReceiver(receiver)
     }
 
+    /**
+     * 启动服务
+     * @param context Context context
+     */
+    fun startService(context: Context) {
+        context.startService(NotificationService::class.java)
+        if (PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean("enable_floating_ball", false)) {
+            FloatingBallService.startService(context)
+        }
+    }
 }
