@@ -10,6 +10,9 @@
     <string name="setting_enable_floating_ball_summary">Enable or disable floating ball</string>
 
     <string name="setting_group_system">System Settings</string>
+    <string name="setting_wireless_title">Wireless Setting</string>
+    <string name="setting_display_title">Display Setting</string>
+    <string name="setting_date_title">Time And Date Setting</string>
     <string name="setting_accessibility_title">Accessibility Setting</string>
     <string name="setting_input_method_title">Input Method Setting</string>
     <string name="setting_device_manager_title">Device Manager</string>

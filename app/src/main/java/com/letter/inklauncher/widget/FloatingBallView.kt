@@ -9,6 +9,8 @@ import android.view.*
 import android.widget.LinearLayout
 import androidx.core.content.getSystemService
 import com.letter.inklauncher.databinding.LayoutFloatingBallBinding
+import com.letter.inklauncher.model.bean.Constants
+import com.letter.inklauncher.utils.ChannelUtils
 
 /**
  * 悬浮球View
@@ -77,9 +79,12 @@ class FloatingBallView(context: Context) : LinearLayout(context), View.OnTouchLi
      * @param context Context context
      */
     private fun back(context: Context) {
-        if (context !is AccessibilityService ||
-            !context.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)) {
-            context.sendBroadcast("com.mogu.back_key")
+        if (ChannelUtils.isMiReader(context)) {
+            context.sendBroadcast(Constants.MI_READER_BROADCAST_BACK_KEY)
+        } else {
+            if (context is AccessibilityService) {
+                context.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+            }
         }
     }
 

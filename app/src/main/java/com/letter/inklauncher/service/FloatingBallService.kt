@@ -114,7 +114,7 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
                 } else {
                     try {
                         context.startActivity(Settings.ACTION_MANAGE_OVERLAY_PERMISSION) {
-                            data = Uri.parse("package:" + context.packageName)
+                            data = Uri.fromParts("package", context.packageName, null)
                         }
                     } catch (e: Exception) {
                         ShellUtils.execCmd(

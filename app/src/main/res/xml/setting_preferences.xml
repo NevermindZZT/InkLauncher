@@ -20,6 +20,18 @@
 
     <PreferenceCategory android:title="@string/setting_group_system">
 
+<!--        <Preference-->
+<!--            android:key="wireless_setting"-->
+<!--            android:title="@string/setting_wireless_title" />-->
+
+<!--        <Preference-->
+<!--            android:key="display_setting"-->
+<!--            android:title="@string/setting_display_title" />-->
+
+        <Preference
+            android:key="date_setting"
+            android:title="@string/setting_date_title" />
+
         <Preference
             android:key="accessibility_setting"
             android:title="@string/setting_accessibility_title" />

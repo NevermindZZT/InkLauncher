@@ -35,6 +35,9 @@ class SettingFragment : PreferenceFragmentCompat() {
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         when (preference?.key) {
             "enable_back_to_home_notification" -> context?.startService(NotificationService::class.java)
+            "wireless_setting" -> context?.startActivity(Settings.ACTION_WIRELESS_SETTINGS)
+            "display_setting" -> context?.startActivity(Settings.ACTION_DISPLAY_SETTINGS)
+            "date_setting" -> context?.startActivity(Settings.ACTION_DATE_SETTINGS)
             "accessibility_setting" -> context?.startActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             "input_method_setting" -> context?.startActivity(Settings.ACTION_INPUT_METHOD_SETTINGS)
             "device_manager_setting" -> context?.startActivity {

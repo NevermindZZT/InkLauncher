@@ -5,6 +5,9 @@
 
     <data>
         <import type="android.view.View.OnClickListener" />
+        <import type="com.letter.inklauncher.utils.ChannelUtils" />
+        <import type="android.view.View" />
+        <import type="com.letter.inklauncher.LetterApplication" />
 
         <variable
             name="onClickListener"
@@ -15,16 +18,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:format12Hour="yyyy.MM.dd EE"
+            android:format24Hour="yyyy.MM.dd EE"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2020.10.08" />
+
         <ImageButton
             android:id="@+id/setting_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:background="@null"
-            android:padding="8dp"
             android:onClick="@{view -> onClickListener.onClick(view)}"
+            android:padding="8dp"
+            android:visibility="@{ChannelUtils.INSTANCE.isMiReader(LetterApplication.instance()) ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_launcher_settings"
-            tools:ignore="contentDescription"/>
+            tools:ignore="contentDescription" />
+
+        <ImageButton
+            android:id="@+id/clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:background="@null"
+            android:onClick="@{view -> onClickListener.onClick(view)}"
+            android:padding="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/setting_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_launcher_clear_mem"
+            tools:ignore="contentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
