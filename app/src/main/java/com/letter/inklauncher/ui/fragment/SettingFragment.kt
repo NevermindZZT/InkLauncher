@@ -21,8 +21,8 @@ class SettingFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.setting_preferences, rootKey)
 
-        val themeModePreference = findPreference<SwitchPreference>("enable_floating_ball")
-        themeModePreference?.setOnPreferenceChangeListener { _, newValue ->
+        val floatingBallPreference = findPreference<SwitchPreference>("enable_floating_ball")
+        floatingBallPreference?.setOnPreferenceChangeListener { _, newValue ->
             if (newValue as Boolean) {
                 FloatingBallService.startService(requireContext())
             } else {

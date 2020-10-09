@@ -14,7 +14,7 @@
     <string name="setting_app_manager_title">应用管理</string>
     <string name="notification_back_to_home_title">返回桌面</string>
     <string name="notification_back_to_home_content">点击通知返回桌面</string>
-    <string name="service_start_floating_ball_description">开启悬浮球</string>
+    <string name="accessibility_service_floating_ball_description">开启后使用悬浮球返回等功能</string>
     <string name="setting_wireless_title">网络设置</string>
     <string name="setting_date_title">时间和日期设置</string>
     <string name="setting_display_title">显示设置</string>

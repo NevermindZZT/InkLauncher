@@ -18,7 +18,9 @@ import android.view.accessibility.AccessibilityManager
 import com.blankj.utilcode.util.ShellUtils
 import com.letter.inklauncher.R
 import com.letter.inklauncher.databinding.LayoutFloatingBallBinding
+import com.letter.inklauncher.utils.ChannelUtils
 import com.letter.inklauncher.widget.FloatingBallView
+import com.letter.utils.AccessibilityUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Math.abs
@@ -86,8 +88,10 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.floating_button -> {
-                if (!performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)) {
+                if (ChannelUtils.isMiReader(this)) {
                     sendBroadcast("com.mogu.back_key")
+                } else {
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
                 }
             }
         }
@@ -96,13 +100,15 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
     companion object {
 
         private fun checkAccessibility(context: Context, func: (() -> Unit)? = null) {
-            try {
-                context.startActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            } catch (e: Exception) {
-                ShellUtils.execCmd(
-                    "pm grant com.letter.inklauncher android.permission.BIND_ACCESSIBILITY_SERVICE",
-                    false
-                )
+            if (!AccessibilityUtils.isServiceEnabled(context, FloatingBallService::class.java)) {
+                try {
+                    context.startActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                } catch (e: Exception) {
+                    ShellUtils.execCmd(
+                        "pm grant ${context.packageName} android.permission.BIND_ACCESSIBILITY_SERVICE",
+                        false
+                    )
+                }
             }
             func?.invoke()
         }
@@ -118,7 +124,7 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
                         }
                     } catch (e: Exception) {
                         ShellUtils.execCmd(
-                            "pm grant com.letter.inklauncher android.permission.SYSTEM_ALERT_WINDOW",
+                            "pm grant ${context.packageName} android.permission.SYSTEM_ALERT_WINDOW",
                             false
                         )
                         func?.invoke()
@@ -132,7 +138,9 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
         fun startService(context: Context) {
             checkOverlaysPermission(context) {
                 context.startService(FloatingBallService::class.java)
-//                checkAccessibility(context)
+                if (!ChannelUtils.isMiReader(context)) {
+                    checkAccessibility(context)
+                }
             }
         }
 
