@@ -1,14 +1,16 @@
 package com.letter.inklauncher.viewmodel
 
+import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
-import com.letter.inklauncher.service.FloatingBallService
-import com.letter.inklauncher.service.NotificationService
+import com.letter.inklauncher.R
+import com.letter.inklauncher.service.CoreService
 import com.letter.utils.AppInfo
 import com.letter.utils.AppUtils
 
@@ -27,6 +29,7 @@ class LauncherViewModel : ViewModel() {
     val appList: MutableLiveData<ObservableList<AppInfo>> = MutableLiveData(
         ObservableArrayList()
     )
+    val showLockButton = MutableLiveData(false)
 
     private val filter by lazy {
         IntentFilter().apply {
@@ -89,10 +92,6 @@ class LauncherViewModel : ViewModel() {
      * @param context Context context
      */
     fun startService(context: Context) {
-        context.startService(NotificationService::class.java)
-        if (PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean("enable_floating_ball", false)) {
-            FloatingBallService.startService(context)
-        }
+        context.startService(CoreService::class.java)
     }
 }

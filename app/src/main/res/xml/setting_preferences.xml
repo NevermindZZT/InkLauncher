@@ -16,6 +16,12 @@
             android:title="@string/setting_enable_floating_ball_title"
             android:summary="@string/setting_enable_floating_ball_summary" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enable_aod"
+            android:title="@string/setting_enable_aod_title"
+            android:summary="@string/setting_enable_aod_summary" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_group_system">

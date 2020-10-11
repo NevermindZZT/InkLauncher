@@ -1,11 +1,8 @@
 package com.letter.inklauncher
 
 import android.app.Application
-import android.content.startService
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import com.letter.inklauncher.service.FloatingBallService
-import com.letter.inklauncher.service.NotificationService
 
 /**
  * Application

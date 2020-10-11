@@ -1,45 +1,80 @@
 package com.letter.inklauncher.service
 
 import android.accessibilityservice.AccessibilityService
-import android.app.Service
+import android.app.NotificationManager
 import android.content.*
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
-import android.os.IBinder
 import android.provider.Settings
-import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityManager
+import androidx.preference.PreferenceManager
 import com.blankj.utilcode.util.ShellUtils
 import com.letter.inklauncher.R
-import com.letter.inklauncher.databinding.LayoutFloatingBallBinding
+import com.letter.inklauncher.ui.activity.AlwaysOnDisplayActivity
 import com.letter.inklauncher.utils.ChannelUtils
+import com.letter.inklauncher.utils.NotificationUtils
 import com.letter.inklauncher.widget.FloatingBallView
 import com.letter.utils.AccessibilityUtils
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.lang.Math.abs
 
-private const val TAG = "FloatingBallService"
+private const val TAG = "CoreService"
 
 /**
- * Floating ball service
+ * core service
  *
  * @author Letter(nevermindzzt@gmail.com)
  * @since 1.0.0
  */
-class FloatingBallService : AccessibilityService(), View.OnClickListener {
+class CoreService : AccessibilityService(), View.OnClickListener {
 
-    private lateinit var floatingBallView : FloatingBallView
+    private val floatingBallView by lazy {
+        FloatingBallView(this)
+    }
     private lateinit var layoutParams: WindowManager.LayoutParams
 
+    private val filter by lazy {
+        IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_OFF)
+        }
+    }
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (PreferenceManager.getDefaultSharedPreferences(this@CoreService)
+                    .getBoolean("enable_aod", false)) {
+                MainScope().launch {
+                    startActivity(AlwaysOnDisplayActivity::class.java) {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+                }
+            }
+        }
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return super.onStartCommand(intent, flags, startId)
+        when (intent?.getStringExtra(INTENT_EXTRA)) {
+            INTENT_NOTIFICATION -> {
+                createHomeNotification()
+            }
+            INTENT_FLOATING_BALL -> {
+                if (PreferenceManager.getDefaultSharedPreferences(this)
+                        .getBoolean("enable_floating_ball", false)) {
+                    showFloatingBall()
+                }
+            }
+            else -> {
+                createHomeNotification()
+                if (PreferenceManager.getDefaultSharedPreferences(this)
+                        .getBoolean("enable_floating_ball", false)) {
+                    showFloatingBall()
+                }
+            }
+        }
+        return START_STICKY
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -51,16 +86,39 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
     }
 
     override fun onCreate() {
-        createFloatingBall()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(
+                getString(R.string.notification_channel_intent_id),
+                getString(R.string.notification_channel_intent_name),
+                NotificationManager.IMPORTANCE_MAX)
+        }
+
+        registerReceiver(receiver, filter)
+
         super.onCreate()
     }
 
     override fun onDestroy() {
         (getSystemService(Context.WINDOW_SERVICE) as WindowManager?)?.removeView(floatingBallView)
+
+        unregisterReceiver(receiver)
         super.onDestroy()
     }
 
-    private fun createFloatingBall() {
+    private fun createHomeNotification() {
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("enable_back_to_home_notification", false)) {
+            startForeground(-1, NotificationUtils.getHomeNotification(this))
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                stopForeground(-1)
+            } else {
+                stopForeground(true)
+            }
+        }
+    }
+
+    private fun showFloatingBall() {
         layoutParams = WindowManager.LayoutParams()
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         layoutParams.apply {
@@ -80,7 +138,6 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
             height = WindowManager.LayoutParams.WRAP_CONTENT
         }
 
-        floatingBallView = FloatingBallView(this)
         windowManager.addView(floatingBallView, layoutParams)
         floatingBallView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     }
@@ -99,8 +156,12 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
 
     companion object {
 
+        const val INTENT_EXTRA = "extra"
+        const val INTENT_NOTIFICATION = "notification"
+        const val INTENT_FLOATING_BALL = "floating_ball"
+
         private fun checkAccessibility(context: Context, func: (() -> Unit)? = null) {
-            if (!AccessibilityUtils.isServiceEnabled(context, FloatingBallService::class.java)) {
+            if (!AccessibilityUtils.isServiceEnabled(context, CoreService::class.java)) {
                 try {
                     context.startActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 } catch (e: Exception) {
@@ -135,17 +196,25 @@ class FloatingBallService : AccessibilityService(), View.OnClickListener {
             }
         }
 
-        fun startService(context: Context) {
-            checkOverlaysPermission(context) {
-                context.startService(FloatingBallService::class.java)
-                if (!ChannelUtils.isMiReader(context)) {
-                    checkAccessibility(context)
+        fun startService(context: Context, extra: String) {
+            when (extra) {
+                INTENT_NOTIFICATION -> {
+                    context.startService(CoreService::class.java) {
+                        putExtra(INTENT_EXTRA, extra)
+                    }
+                }
+                INTENT_FLOATING_BALL -> {
+                    checkOverlaysPermission(context) {
+                        context.startService(CoreService::class.java) {
+                            putExtra(INTENT_EXTRA, extra)
+                        }
+                        if (!ChannelUtils.isMiReader(context)) {
+                            checkAccessibility(context)
+                        }
+                    }
                 }
             }
         }
-
-        fun stopService(context: Context) {
-            context.stopService(FloatingBallService::class.java)
-        }
     }
+
 }

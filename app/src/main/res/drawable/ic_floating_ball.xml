@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape
-            android:shape="oval">
-            <stroke android:color="@color/colorFloatingBorder"
-                android:width="2dp"
-                android:dashGap="16dp"
-                android:dashWidth="2dp"/>
-<!--            <solid android:color="@color/colorFloatingInner" />-->
-        </shape>
+        <layer-list>
+            <item>
+                <shape android:shape="oval">
+                    <stroke android:color="@color/colorFloatingBorder"
+                        android:width="2dp"
+                        android:dashGap="16dp"
+                        android:dashWidth="2dp"/>
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="oval">
+                    <stroke android:color="#A0FFFFFF"
+                        android:width="2dp"
+                        android:paddingStart="2dp"
+                        android:dashGap="2dp"
+                        android:dashWidth="16dp" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
 </selector>

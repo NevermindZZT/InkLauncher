@@ -2,14 +2,12 @@ package com.letter.inklauncher.ui.fragment
 
 import android.content.ComponentName
 import android.content.startActivity
-import android.content.startService
 import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.*
 
 import com.letter.inklauncher.R
-import com.letter.inklauncher.service.FloatingBallService
-import com.letter.inklauncher.service.NotificationService
+import com.letter.inklauncher.service.CoreService
 
 /**
  * 设置Fragment
@@ -22,19 +20,15 @@ class SettingFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.setting_preferences, rootKey)
 
         val floatingBallPreference = findPreference<SwitchPreference>("enable_floating_ball")
-        floatingBallPreference?.setOnPreferenceChangeListener { _, newValue ->
-            if (newValue as Boolean) {
-                FloatingBallService.startService(requireContext())
-            } else {
-                FloatingBallService.stopService(requireContext())
-            }
+        floatingBallPreference?.setOnPreferenceChangeListener { _, _ ->
+            CoreService.startService(requireContext(), CoreService.INTENT_FLOATING_BALL)
             true
         }
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         when (preference?.key) {
-            "enable_back_to_home_notification" -> context?.startService(NotificationService::class.java)
+            "enable_back_to_home_notification" -> CoreService.startService(requireContext(), CoreService.INTENT_NOTIFICATION)
             "wireless_setting" -> context?.startActivity(Settings.ACTION_WIRELESS_SETTINGS)
             "display_setting" -> context?.startActivity(Settings.ACTION_DISPLAY_SETTINGS)
             "date_setting" -> context?.startActivity(Settings.ACTION_DATE_SETTINGS)

@@ -18,4 +18,6 @@
     <string name="setting_wireless_title">网络设置</string>
     <string name="setting_date_title">时间和日期设置</string>
     <string name="setting_display_title">显示设置</string>
+    <string name="setting_enable_aod_title">熄屏常显</string>
+    <string name="setting_enable_aod_summary">开启或关闭熄屏常显功能，熄屏常显状态双击屏幕返回桌面</string>
 </resources>

@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.startActivity
 import androidx.lifecycle.*
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.blankj.utilcode.util.AppUtils
 import com.letter.inklauncher.R
 import com.letter.inklauncher.adapter.BindingViewAdapter
 import com.letter.inklauncher.databinding.FragmentLauncherBinding
 import com.letter.inklauncher.model.bean.Constants
+import com.letter.inklauncher.ui.activity.AlwaysOnDisplayActivity
 import com.letter.inklauncher.ui.activity.SettingActivity
 import com.letter.inklauncher.utils.ChannelUtils
 import com.letter.inklauncher.viewmodel.LauncherViewModel
@@ -54,10 +56,17 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
         model.unregisterBroadcast(requireContext())
     }
 
+    override fun onResume() {
+        model.showLockButton.value = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .getBoolean("enable_aod", false)
+        super.onResume()
+    }
+
     private fun initBinding() {
         binding.let {
             it.lifecycleOwner = this@LauncherFragment.viewLifecycleOwner
             it.bottomToolbar.onClickListener = this@LauncherFragment
+            it.bottomToolbar.vm = model
         }
     }
 
@@ -98,6 +107,9 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
                 if (ChannelUtils.isMiReader(requireContext())) {
                     requireContext().sendBroadcast(Constants.MI_READER_BROADCAST_CLEAR_MEM)
                 }
+            }
+            R.id.lock_button -> {
+                startActivity(AlwaysOnDisplayActivity::class.java)
             }
         }
     }
