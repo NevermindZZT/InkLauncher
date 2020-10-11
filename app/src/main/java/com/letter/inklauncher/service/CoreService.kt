@@ -36,6 +36,7 @@ class CoreService : AccessibilityService(), View.OnClickListener {
         FloatingBallView(this)
     }
     private lateinit var layoutParams: WindowManager.LayoutParams
+    private var isFloatingBallAdded = false
 
     private val filter by lazy {
         IntentFilter().apply {
@@ -64,6 +65,8 @@ class CoreService : AccessibilityService(), View.OnClickListener {
                 if (PreferenceManager.getDefaultSharedPreferences(this)
                         .getBoolean("enable_floating_ball", false)) {
                     showFloatingBall()
+                } else {
+                    hideFloatingBall()
                 }
             }
             INTENT_FLOATING_BALL_HIDE -> {
@@ -74,6 +77,8 @@ class CoreService : AccessibilityService(), View.OnClickListener {
                 if (PreferenceManager.getDefaultSharedPreferences(this)
                         .getBoolean("enable_floating_ball", false)) {
                     showFloatingBall()
+                } else {
+                    hideFloatingBall()
                 }
             }
         }
@@ -128,6 +133,9 @@ class CoreService : AccessibilityService(), View.OnClickListener {
      * 显示悬浮球
      */
     private fun showFloatingBall() {
+        if (isFloatingBallAdded) {
+            return
+        }
         layoutParams = WindowManager.LayoutParams()
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         layoutParams.apply {
@@ -147,6 +155,7 @@ class CoreService : AccessibilityService(), View.OnClickListener {
             height = WindowManager.LayoutParams.WRAP_CONTENT
         }
 
+        isFloatingBallAdded = true
         windowManager.addView(floatingBallView, layoutParams)
         floatingBallView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     }
@@ -155,7 +164,11 @@ class CoreService : AccessibilityService(), View.OnClickListener {
      * 隐藏悬浮球
      */
     private fun hideFloatingBall() {
+        if (!isFloatingBallAdded) {
+            return
+        }
         (getSystemService(Context.WINDOW_SERVICE) as WindowManager?)?.removeView(floatingBallView)
+        isFloatingBallAdded = false
     }
 
     override fun onClick(v: View?) {

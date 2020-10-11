@@ -18,17 +18,12 @@ class SettingFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.setting_preferences, rootKey)
-
-        val floatingBallPreference = findPreference<SwitchPreference>("enable_floating_ball")
-        floatingBallPreference?.setOnPreferenceChangeListener { _, _ ->
-            CoreService.startService(requireContext(), CoreService.INTENT_FLOATING_BALL)
-            true
-        }
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         when (preference?.key) {
             "enable_back_to_home_notification" -> CoreService.startService(requireContext(), CoreService.INTENT_NOTIFICATION)
+            "enable_floating_ball" -> CoreService.startService(requireContext(), CoreService.INTENT_FLOATING_BALL)
             "wireless_setting" -> context?.startActivity(Settings.ACTION_WIRELESS_SETTINGS)
             "display_setting" -> context?.startActivity(Settings.ACTION_DISPLAY_SETTINGS)
             "date_setting" -> context?.startActivity(Settings.ACTION_DATE_SETTINGS)

@@ -1,17 +1,21 @@
 package com.letter.inklauncher.ui.activity
 
+import android.content.sendBroadcast
 import android.content.toast
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
+import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.letter.inklauncher.R
 import com.letter.inklauncher.databinding.ActivityAlwaysOnDisplayBinding
+import com.letter.inklauncher.model.bean.Constants
 import com.letter.inklauncher.service.CoreService
 import com.letter.inklauncher.ui.fragment.aod.SimpleTimeFragment
+import com.letter.inklauncher.utils.ChannelUtils
 import com.letter.presenter.ViewPresenter
 import kotlinx.android.synthetic.main.activity_always_on_display.view.*
 
@@ -63,6 +67,9 @@ class AlwaysOnDisplayActivity : AppCompatActivity(), ViewPresenter {
 
     override fun onResume() {
         CoreService.startService(this, CoreService.INTENT_FLOATING_BALL_HIDE)
+        if (ChannelUtils.isMiReader(this)) {
+            sendBroadcast(Constants.MI_READER_BROADCAST_FORCE_REFRESH)
+        }
         super.onResume()
     }
 
