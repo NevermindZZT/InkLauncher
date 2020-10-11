@@ -20,4 +20,5 @@
     <string name="setting_display_title">显示设置</string>
     <string name="setting_enable_aod_title">熄屏常显</string>
     <string name="setting_enable_aod_summary">开启或关闭熄屏常显功能，熄屏常显状态双击屏幕返回桌面</string>
+    <string name="toast_aod_double_click_to_back_to_home">双击屏幕返回桌面</string>
 </resources>

@@ -13,6 +13,7 @@ import com.letter.inklauncher.R
 import com.letter.inklauncher.service.CoreService
 import com.letter.utils.AppInfo
 import com.letter.utils.AppUtils
+import java.lang.Exception
 
 /**
  * launcher view model
@@ -92,6 +93,10 @@ class LauncherViewModel : ViewModel() {
      * @param context Context context
      */
     fun startService(context: Context) {
-        context.startService(CoreService::class.java)
+        try {
+            context.startService(CoreService::class.java)
+        } catch (e: Exception) {
+
+        }
     }
 }

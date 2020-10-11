@@ -27,4 +27,6 @@
     <string name="notification_back_to_home_content">Click Notification to back to home</string>
 
     <string name="accessibility_service_floating_ball_description">Enable to use floating ball for back</string>
+
+    <string name="toast_aod_double_click_to_back_to_home">double click to back to home</string>
 </resources>

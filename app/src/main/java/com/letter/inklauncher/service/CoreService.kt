@@ -66,6 +66,9 @@ class CoreService : AccessibilityService(), View.OnClickListener {
                     showFloatingBall()
                 }
             }
+            INTENT_FLOATING_BALL_HIDE -> {
+                hideFloatingBall()
+            }
             else -> {
                 createHomeNotification()
                 if (PreferenceManager.getDefaultSharedPreferences(this)
@@ -99,12 +102,15 @@ class CoreService : AccessibilityService(), View.OnClickListener {
     }
 
     override fun onDestroy() {
-        (getSystemService(Context.WINDOW_SERVICE) as WindowManager?)?.removeView(floatingBallView)
+        hideFloatingBall()
 
         unregisterReceiver(receiver)
         super.onDestroy()
     }
 
+    /**
+     * 创建返回桌面通知
+     */
     private fun createHomeNotification() {
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean("enable_back_to_home_notification", false)) {
@@ -118,6 +124,9 @@ class CoreService : AccessibilityService(), View.OnClickListener {
         }
     }
 
+    /**
+     * 显示悬浮球
+     */
     private fun showFloatingBall() {
         layoutParams = WindowManager.LayoutParams()
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -142,6 +151,13 @@ class CoreService : AccessibilityService(), View.OnClickListener {
         floatingBallView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     }
 
+    /**
+     * 隐藏悬浮球
+     */
+    private fun hideFloatingBall() {
+        (getSystemService(Context.WINDOW_SERVICE) as WindowManager?)?.removeView(floatingBallView)
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.floating_button -> {
@@ -159,6 +175,7 @@ class CoreService : AccessibilityService(), View.OnClickListener {
         const val INTENT_EXTRA = "extra"
         const val INTENT_NOTIFICATION = "notification"
         const val INTENT_FLOATING_BALL = "floating_ball"
+        const val INTENT_FLOATING_BALL_HIDE = "floating_ball_hide"
 
         private fun checkAccessibility(context: Context, func: (() -> Unit)? = null) {
             if (!AccessibilityUtils.isServiceEnabled(context, CoreService::class.java)) {
@@ -198,11 +215,6 @@ class CoreService : AccessibilityService(), View.OnClickListener {
 
         fun startService(context: Context, extra: String) {
             when (extra) {
-                INTENT_NOTIFICATION -> {
-                    context.startService(CoreService::class.java) {
-                        putExtra(INTENT_EXTRA, extra)
-                    }
-                }
                 INTENT_FLOATING_BALL -> {
                     checkOverlaysPermission(context) {
                         context.startService(CoreService::class.java) {
@@ -211,6 +223,11 @@ class CoreService : AccessibilityService(), View.OnClickListener {
                         if (!ChannelUtils.isMiReader(context)) {
                             checkAccessibility(context)
                         }
+                    }
+                }
+                else -> {
+                    context.startService(CoreService::class.java) {
+                        putExtra(INTENT_EXTRA, extra)
                     }
                 }
             }
