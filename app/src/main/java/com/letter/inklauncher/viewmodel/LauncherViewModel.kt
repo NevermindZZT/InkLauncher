@@ -30,7 +30,7 @@ class LauncherViewModel : ViewModel() {
     val appList: MutableLiveData<ObservableList<AppInfo>> = MutableLiveData(
         ObservableArrayList()
     )
-    val showLockButton = MutableLiveData(false)
+    val showLockButton = MutableLiveData(true)
 
     private val filter by lazy {
         IntentFilter().apply {

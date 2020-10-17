@@ -1,5 +1,6 @@
 package com.letter.inklauncher.ui.activity
 
+import android.content.pm.ActivityInfo
 import android.content.sendBroadcast
 import android.content.toast
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.letter.inklauncher.R
 import com.letter.inklauncher.databinding.ActivityAlwaysOnDisplayBinding
 import com.letter.inklauncher.model.bean.Constants
@@ -56,6 +58,10 @@ class AlwaysOnDisplayActivity : AppCompatActivity(), ViewPresenter {
         window.addFlags(
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                     or WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("aod_landscape", false)) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
         val powerManager = (getSystemService(POWER_SERVICE) as PowerManager?)
         val wakeLock = powerManager?.newWakeLock(
             PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,

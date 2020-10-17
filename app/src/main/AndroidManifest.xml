@@ -35,7 +35,8 @@
                 android:resource="@xml/accessibilityservice" />
         </service>
 
-        <activity android:name=".ui.activity.AlwaysOnDisplayActivity" />
+        <activity android:name=".ui.activity.AlwaysOnDisplayActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.LauncherActivity">
             <intent-filter>

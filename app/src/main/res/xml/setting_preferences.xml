@@ -22,6 +22,12 @@
             android:title="@string/setting_enable_aod_title"
             android:summary="@string/setting_enable_aod_summary" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="aod_landscape"
+            android:title="@string/setting_aod_landscape_title"
+            android:summary="@string/setting_aod_landscape_summary" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_group_system">

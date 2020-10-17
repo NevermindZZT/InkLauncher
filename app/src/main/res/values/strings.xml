@@ -10,6 +10,8 @@
     <string name="setting_enable_floating_ball_summary">Enable or disable floating ball</string>
     <string name="setting_enable_aod_title">Always on Display</string>
     <string name="setting_enable_aod_summary">Enable or disable always on display</string>
+    <string name="setting_aod_landscape_title">Aod Landscape</string>
+    <string name="setting_aod_landscape_summary">Landscape in aod</string>
 
     <string name="setting_group_system">System Settings</string>
     <string name="setting_wireless_title">Wireless Setting</string>
