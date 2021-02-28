@@ -56,12 +56,6 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
         model.unregisterBroadcast(requireContext())
     }
 
-//    override fun onResume() {
-//        model.showLockButton.value = PreferenceManager.getDefaultSharedPreferences(requireContext())
-//            .getBoolean("enable_aod", false)
-//        super.onResume()
-//    }
-
     private fun initBinding() {
         binding.let {
             it.lifecycleOwner = this@LauncherFragment.viewLifecycleOwner
