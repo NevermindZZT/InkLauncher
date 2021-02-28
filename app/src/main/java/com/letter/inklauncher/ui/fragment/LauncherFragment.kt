@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.startActivity
 import androidx.lifecycle.*
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.blankj.utilcode.util.AppUtils
 import com.letter.inklauncher.R
@@ -96,6 +95,7 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.time_view -> model.onDoubleClickLockScreen(requireContext())
             R.id.setting_button -> startActivity(SettingActivity::class.java)
             R.id.clear_button -> {
                 if (ChannelUtils.isMiReader(requireContext())) {

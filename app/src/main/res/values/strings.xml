@@ -12,6 +12,8 @@
     <string name="setting_enable_aod_summary">Enable or disable always on display</string>
     <string name="setting_aod_landscape_title">Aod Landscape</string>
     <string name="setting_aod_landscape_summary">Landscape in aod</string>
+    <string name="setting_enable_double_click_lock_title">Double click lock</string>
+    <string name="setting_enable_double_click_lock_summary">Double click the time widget in toolbar to lock screen</string>
 
     <string name="setting_group_system">System Settings</string>
     <string name="setting_wireless_title">Wireless Setting</string>

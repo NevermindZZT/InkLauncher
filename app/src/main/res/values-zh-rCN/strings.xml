@@ -23,4 +23,6 @@
     <string name="toast_aod_double_click_to_back_to_home">双击屏幕返回桌面</string>
     <string name="setting_aod_landscape_title">熄屏常显横屏</string>
     <string name="setting_aod_landscape_summary">熄屏常显时，将屏幕设置为横屏</string>
+    <string name="setting_enable_double_click_lock_title">双击锁屏</string>
+    <string name="setting_enable_double_click_lock_summary">双击桌面工具栏时钟锁屏</string>
 </resources>

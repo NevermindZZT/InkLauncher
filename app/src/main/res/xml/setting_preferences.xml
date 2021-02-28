@@ -28,6 +28,12 @@
             android:title="@string/setting_aod_landscape_title"
             android:summary="@string/setting_aod_landscape_summary" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enable_double_click_lock"
+            android:title="@string/setting_enable_double_click_lock_title"
+            android:summary="@string/setting_enable_double_click_lock_summary" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_group_system">

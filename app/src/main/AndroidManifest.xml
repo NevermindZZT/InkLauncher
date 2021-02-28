@@ -22,21 +22,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".receiver.DeviceManagerReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
+
+            </intent-filter></receiver>
+
         <service
             android:name=".service.CoreService"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibilityservice" />
         </service>
 
-        <activity android:name=".ui.activity.AlwaysOnDisplayActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".ui.activity.AlwaysOnDisplayActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.LauncherActivity">
             <intent-filter>

@@ -1,19 +1,19 @@
 package com.letter.inklauncher.viewmodel
 
-import android.app.NotificationManager
+import android.app.admin.DevicePolicyManager
 import android.content.*
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
-import com.letter.inklauncher.R
 import com.letter.inklauncher.service.CoreService
 import com.letter.utils.AppInfo
 import com.letter.utils.AppUtils
-import java.lang.Exception
+import kotlin.Exception
+
+private const val DOUBLE_CLICK_TIME = 500
 
 /**
  * launcher view model
@@ -31,6 +31,8 @@ class LauncherViewModel : ViewModel() {
         ObservableArrayList()
     )
     val showLockButton = MutableLiveData(true)
+
+    private var clickTime = 0L
 
     private val filter by lazy {
         IntentFilter().apply {
@@ -97,6 +99,24 @@ class LauncherViewModel : ViewModel() {
             context.startService(CoreService::class.java)
         } catch (e: Exception) {
 
+        }
+    }
+
+    /**
+     * 双击锁屏
+     * @param context Context context
+     */
+    fun onDoubleClickLockScreen(context: Context) {
+        if (PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean("enable_double_click_lock", false)) {
+            if (System.currentTimeMillis() - clickTime < DOUBLE_CLICK_TIME) {
+                val devicePolicyManager =
+                    context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager?
+                try {
+                    devicePolicyManager?.lockNow()
+                } catch (e: Exception) {}
+            }
+            clickTime = System.currentTimeMillis()
         }
     }
 }
