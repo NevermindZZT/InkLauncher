@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:clickable="true"
+        android:background="@drawable/bg_button"
         android:onClick="@{view->itemClickPresenter.onItemClick(adapter, position)}"
         android:onLongClick="@{()->itemLongClickPresenter.onItemLongClick(adapter, position)}">
 
