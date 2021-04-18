@@ -8,6 +8,7 @@
         <import type="com.letter.inklauncher.LetterApplication" />
         <import type="com.letter.inklauncher.R" />
         <import type="android.view.View.OnClickListener" />
+        <import type="android.view.View" />
 
         <variable
             name="appInfo"
@@ -64,36 +65,50 @@
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             tools:text="1.0.0" />
 
-        <Button
-            android:id="@+id/uninstall_button"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_button"
-            android:onClick="@{view -> onClickListener.onClick(view)}"
-            android:text="@{LetterApplication.instance().getString(appInfo.isSystem ? R.string.dialog_app_info_disable_text : R.string.dialog_app_info_uninstall_text)}"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"
-            tools:text="uninstall" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
-        <Button
-            android:id="@+id/hide_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_button"
-            android:onClick="@{view -> onClickListener.onClick(view)}"
-            android:text="@{LetterApplication.instance().getString(isHide ? R.string.dialog_app_info_show_text : R.string.dialog_app_info_hide_text)}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/uninstall_button" />
+            <Button
+                android:id="@+id/uninstall_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_button"
+                android:visibility="@{appInfo.isSystem ? View.GONE : View.VISIBLE}"
+                android:onClick="@{view -> onClickListener.onClick(view)}"
+                android:text="@{LetterApplication.instance().getString(appInfo.isSystem ? R.string.dialog_app_info_disable_text : R.string.dialog_app_info_uninstall_text)}"
+                tools:text="uninstall" />
+
+            <Button
+                android:id="@+id/hide_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_button"
+                android:onClick="@{view -> onClickListener.onClick(view)}"
+                android:text="@{LetterApplication.instance().getString(isHide ? R.string.dialog_app_info_show_text : R.string.dialog_app_info_hide_text)}"
+                tools:text="hide" />
+
+            <Button
+                android:id="@+id/info_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_button"
+                android:onClick="@{view -> onClickListener.onClick(view)}"
+                android:text="@string/dialog_app_info_text" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

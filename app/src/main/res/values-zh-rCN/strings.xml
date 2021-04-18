@@ -7,6 +7,7 @@
     <string name="dialog_app_info_disable_text">禁用</string>
     <string name="dialog_app_info_hide_text">隐藏</string>
     <string name="dialog_app_info_show_text">显示</string>
+    <string name="dialog_app_info_text">应用信息</string>
 
     <string name="dialog_app_uninstall_confirm_text">卸载 %s ?</string>
     <string name="dialog_app_disable_confirm_text">禁用 %s?</string>

@@ -7,6 +7,7 @@
     <string name="dialog_app_info_disable_text">Disable</string>
     <string name="dialog_app_info_hide_text">Hide</string>
     <string name="dialog_app_info_show_text">Show</string>
+    <string name="dialog_app_info_text">App info</string>
 
     <string name="dialog_app_uninstall_confirm_text">Uninstall %s ?</string>
     <string name="dialog_app_disable_confirm_text">Disable %s ?</string>

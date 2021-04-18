@@ -17,13 +17,15 @@ fun MaterialDialog.appInfo(
     appInfo: AppInfo? = null,
     isHide: Boolean = false,
     uninstall: AppInfoDialogCallback? = null,
-    hide: AppInfoDialogCallback? = null
+    hide: AppInfoDialogCallback? = null,
+    info: AppInfoDialogCallback? = null
 ): MaterialDialog {
     val binding = DialogAppInfoBinding.inflate(layoutInflater)
     val onClickListener = View.OnClickListener {
         when (it.id) {
             R.id.uninstall_button -> uninstall?.invoke(this, appInfo)
             R.id.hide_button -> hide?.invoke(this, appInfo)
+            R.id.info_button -> info?.invoke(this, appInfo)
         }
     }
     binding.let {

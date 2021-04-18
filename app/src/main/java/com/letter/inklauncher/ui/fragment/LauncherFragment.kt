@@ -1,7 +1,9 @@
 package com.letter.inklauncher.ui.fragment
 
 import android.content.sendBroadcast
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,7 @@ import com.letter.inklauncher.viewmodel.LauncherViewModel
 import com.letter.presenter.ItemClickPresenter
 import com.letter.presenter.ItemLongClickPresenter
 import com.letter.utils.AppInfo
+import kotlinx.coroutines.launch
 
 /**
  * launcher fragment
@@ -99,9 +102,6 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
     }
 
     override fun onItemLongClick(adapter: Any, position: Int): Boolean {
-//        startActivity(Settings.ACTION_APPLICATION_DETAILS_SETTINGS) {
-//            data = Uri.fromParts("package", model.appList.value?.get(position)?.packageName, null)
-//        }
         MaterialDialog(requireContext()).show {
             appInfo(
                 layoutInflater,
@@ -116,6 +116,14 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
                 object : AppInfoDialogCallback {
                     override fun invoke(dialog: MaterialDialog, appinfo: AppInfo?) {
                         onHideOrShow(appinfo)
+                        dialog.dismiss()
+                    }
+                },
+                object : AppInfoDialogCallback {
+                    override fun invoke(dialog: MaterialDialog, appinfo: AppInfo?) {
+                        startActivity(Settings.ACTION_APPLICATION_DETAILS_SETTINGS) {
+                            data = Uri.fromParts("package", model.appList.value?.get(position)?.packageName, null)
+                        }
                         dialog.dismiss()
                     }
                 }
@@ -140,20 +148,26 @@ class LauncherFragment : Fragment(), ItemClickPresenter, ItemLongClickPresenter,
     }
 
     fun onUninstallOrDisable(appInfo: AppInfo?) {
-        MaterialDialog(requireContext()).show {
-            message(
-                layoutInflater,
-                this@LauncherFragment.viewLifecycleOwner,
-                confirm = object : MessageCallback {
-                    override fun invoke(dialog: MaterialDialog) {
-                        model.onUninstallOrDisable(requireContext(), appInfo)
-                        dialog.dismiss()
-                    }
+        if (appInfo?.isSystem == false) {
+            model.viewModelScope.launch {
+                model.onUninstallOrDisable(requireContext(), appInfo)
+            }
+        } else {
+            MaterialDialog(requireContext()).show {
+                message(
+                    layoutInflater,
+                    this@LauncherFragment.viewLifecycleOwner,
+                    confirm = object : MessageCallback {
+                        override fun invoke(dialog: MaterialDialog) {
+                            model.onUninstallOrDisable(requireContext(), appInfo)
+                            dialog.dismiss()
+                        }
 
-                },
-                message = getString(if (appInfo?.isSystem == true) R.string.dialog_app_disable_confirm_text else R.string.dialog_app_uninstall_confirm_text)
-                    .format(appInfo?.name)
-            )
+                    },
+                    message = getString(if (appInfo?.isSystem == true) R.string.dialog_app_disable_confirm_text else R.string.dialog_app_uninstall_confirm_text)
+                        .format(appInfo?.name)
+                )
+            }
         }
     }
 
