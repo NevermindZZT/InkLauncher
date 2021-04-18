@@ -3,6 +3,19 @@
 
     <string name="activity_setting_title">Settings</string>
 
+    <string name="dialog_app_info_uninstall_text">Uninstall</string>
+    <string name="dialog_app_info_disable_text">Disable</string>
+    <string name="dialog_app_info_hide_text">Hide</string>
+    <string name="dialog_app_info_show_text">Show</string>
+
+    <string name="dialog_app_uninstall_confirm_text">Uninstall %s ?</string>
+    <string name="dialog_app_disable_confirm_text">Disable %s ?</string>
+    <string name="dialog_app_hide_confirm_text">Hide %s ?</string>
+    <string name="dialog_app_show_confirm_text">Show %s ?</string>
+
+    <string name="dialog_positive_text">Confirm</string>
+    <string name="dialog_negative_text">Cancel</string>
+
     <string name="setting_group_basic">Basic Settings</string>
     <string name="setting_enable_back_to_home_notification_title">Enable Back to Home Notification</string>
     <string name="setting_enable_back_to_home_notification_summary">Enable Back to Home Notification</string>
@@ -14,6 +27,8 @@
     <string name="setting_aod_landscape_summary">Landscape in aod</string>
     <string name="setting_enable_double_click_lock_title">Double click lock</string>
     <string name="setting_enable_double_click_lock_summary">Double click the time widget in toolbar to lock screen</string>
+    <string name="setting_show_hided_app_title">Show hided app</string>
+    <string name="setting_show_hided_app_summary">Show All app in launcher, include hided app</string>
 
     <string name="setting_group_system">System Settings</string>
     <string name="setting_wireless_title">Wireless Setting</string>

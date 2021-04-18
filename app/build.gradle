@@ -14,8 +14,8 @@ android {
         applicationId "com.letter.inklauncher"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 10000
-        versionName "1.0.0"
+        versionCode 10001
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

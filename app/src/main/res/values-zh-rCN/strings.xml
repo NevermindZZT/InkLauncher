@@ -2,6 +2,21 @@
 <resources>
     <string name="app_name">InkLauncher</string>
     <string name="activity_setting_title">设置</string>
+
+    <string name="dialog_app_info_uninstall_text">卸载</string>
+    <string name="dialog_app_info_disable_text">禁用</string>
+    <string name="dialog_app_info_hide_text">隐藏</string>
+    <string name="dialog_app_info_show_text">显示</string>
+
+    <string name="dialog_app_uninstall_confirm_text">卸载 %s ?</string>
+    <string name="dialog_app_disable_confirm_text">禁用 %s?</string>
+    <string name="dialog_app_hide_confirm_text">隐藏 %s ?</string>
+    <string name="dialog_app_show_confirm_text">显示 %s ?</string>
+
+
+    <string name="dialog_positive_text">确认</string>
+    <string name="dialog_negative_text">取消</string>
+
     <string name="setting_group_basic">基础设置</string>
     <string name="setting_enable_back_to_home_notification_title">开启返回桌面通知</string>
     <string name="setting_enable_back_to_home_notification_summary">开启返回桌面通知，打开后会有一条常驻通知，点击可返回桌面</string>
@@ -25,4 +40,6 @@
     <string name="setting_aod_landscape_summary">熄屏常显时，将屏幕设置为横屏</string>
     <string name="setting_enable_double_click_lock_title">双击锁屏</string>
     <string name="setting_enable_double_click_lock_summary">双击桌面工具栏时钟锁屏</string>
+    <string name="setting_show_hided_app_title">显示隐藏应用</string>
+    <string name="setting_show_hided_app_summary">在桌面上显示所有应用，包括隐藏应用</string>
 </resources>

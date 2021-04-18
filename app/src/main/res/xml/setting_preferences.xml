@@ -34,6 +34,12 @@
             android:title="@string/setting_enable_double_click_lock_title"
             android:summary="@string/setting_enable_double_click_lock_summary" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="show_hided_app"
+            android:title="@string/setting_show_hided_app_title"
+            android:summary="@string/setting_show_hided_app_summary" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_group_system">

@@ -3,17 +3,23 @@ package com.letter.inklauncher.viewmodel
 import android.app.admin.DevicePolicyManager
 import android.content.*
 import android.content.pm.PackageManager
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.edit
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
+import com.blankj.utilcode.util.ShellUtils
+import com.letter.inklauncher.LetterApplication
 import com.letter.inklauncher.service.CoreService
 import com.letter.utils.AppInfo
 import com.letter.utils.AppUtils
 import kotlin.Exception
 
 private const val DOUBLE_CLICK_TIME = 500
+private const val TAG = "LauncherViewModel"
 
 /**
  * launcher view model
@@ -31,6 +37,10 @@ class LauncherViewModel : ViewModel() {
         ObservableArrayList()
     )
     val showLockButton = MutableLiveData(true)
+    val showHideApp by lazy {
+        MutableLiveData(PreferenceManager.getDefaultSharedPreferences(LetterApplication.instance())
+            .getBoolean("show_hided_app", false))
+    }
 
     private var clickTime = 0L
 
@@ -51,12 +61,34 @@ class LauncherViewModel : ViewModel() {
         }
     }
 
-    private val hidedPackages = listOf(
+    private val hidedPackages: MutableList<String>
+    get() {
+        val packages = mutableListOf(
         "com.moan.moanwm",
-        "com.letter.inklauncher",
-        "com.android.settings",
-        "com.mgs.factorytest"
-    )
+        "com.letter.inklauncher")
+        if (LetterApplication.instance().packageName == "com.moan.moanwm") {
+            packages.add("com.android.settings")
+            packages.add("com.mgs.factorytest")
+        }
+        val hide = PreferenceManager.getDefaultSharedPreferences(LetterApplication.instance())
+            .getString("hided_packages", null)
+        hide?.split(":")?.forEach {
+            packages.add(it)
+        }
+        return packages
+    }
+
+    /**
+     * view resume
+     * @param context Context context
+     */
+    fun onViewResume(context: Context) {
+        val value = PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean("show_hided_app", false)
+        if (showHideApp.value != value) {
+            showHideApp.value = value
+        }
+    }
 
     /**
      * 加载应用列表
@@ -67,11 +99,54 @@ class LauncherViewModel : ViewModel() {
         appList.value?.clear()
         appList.value?.addAll(
             AppUtils.getAppInfoList(context, PackageManager.GET_ACTIVITIES).filter {
-                it.hasMainActivity && !hidedPackages.contains(it.packageName)
+                it.hasMainActivity && (showHideApp.value == true || !hidedPackages.contains(it.packageName))
             }.sortedBy {
                 it.name
             }
         )
+    }
+
+    /**
+     * 是否为隐藏的app
+     * @param packageName String 包名
+     * @return Boolean {@code true}隐藏 {@code false}非隐藏
+     */
+    fun isHideApp(packageName: String?) =
+        hidedPackages.contains(packageName)
+
+    /**
+     * 添加隐藏的app
+     * @param packageName String 包名
+     */
+    private fun addHidedPackage(packageName: String) {
+        var hide = PreferenceManager.getDefaultSharedPreferences(LetterApplication.instance())
+            .getString("hided_packages", "")?.split(":")?.toMutableList()
+        if (hide == null) {
+            hide = mutableListOf()
+        }
+        hide.add(packageName)
+        val hideStr = hide.joinToString(separator = ":")
+        PreferenceManager.getDefaultSharedPreferences(LetterApplication.instance())
+            .edit {
+                putString("hided_packages", hideStr)
+            }
+    }
+
+    /**
+     * 移除隐藏的app
+     * @param packageName String 包名
+     */
+    private fun removeHidedPackage(packageName: String) {
+        val hide = PreferenceManager.getDefaultSharedPreferences(LetterApplication.instance())
+            .getString("hided_packages", "")?.split(":")?.toMutableList()
+        if (hide != null && hide.contains(packageName)) {
+            hide.remove(packageName)
+            val hideStr = hide.joinToString(separator = ":")
+            PreferenceManager.getDefaultSharedPreferences(LetterApplication.instance())
+                .edit {
+                    putString("hided_packages", hideStr)
+                }
+        }
     }
 
     /**
@@ -117,6 +192,35 @@ class LauncherViewModel : ViewModel() {
                 } catch (e: Exception) {}
             }
             clickTime = System.currentTimeMillis()
+        }
+    }
+
+    /**
+     * 卸载或者禁用app
+     * @param context Context context
+     * @param appInfo AppInfo? app info
+     */
+    fun onUninstallOrDisable(context: Context, appInfo: AppInfo?) {
+        if (appInfo?.isSystem == true) {
+            ShellUtils.execCmd("pm disable  ${appInfo.packageName}", false)
+        } else {
+            com.blankj.utilcode.util.AppUtils.uninstallApp(appInfo?.packageName)
+        }
+    }
+
+    /**
+     * 隐藏或者显示app
+     * @param context Context context
+     * @param appInfo AppInfo? app info
+     */
+    fun onHideOrShow(context: Context, appInfo: AppInfo?) {
+        if (appInfo?.packageName != null) {
+            if (isHideApp(appInfo.packageName)) {
+                removeHidedPackage(appInfo.packageName!!)
+            } else {
+                addHidedPackage(appInfo.packageName!!)
+                loadAppList(context)
+            }
         }
     }
 }
